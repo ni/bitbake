@@ -533,6 +533,21 @@ def preserved_envvars():
     ]
     return v + preserved_envvars_exported()
 
+def readonly_envvars():
+    """
+    Variables which are read-only and cannot be set within a shell, per
+    https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html
+    """
+    return [
+        'BASHOPTS',
+        'BASH_REMATCH',
+        'BASH_VERSINFO',
+        'EUID',
+        'PPID',
+        'SHELLOPTS',
+        'UID',
+    ]
+
 def filter_environment(good_vars):
     """
     Create a pristine environment for bitbake. This will remove variables that

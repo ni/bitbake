@@ -192,6 +192,10 @@ def emit_var(var, o=sys.__stdout__, d = init(), all=False):
     if not all and not export and not unexport and not func:
         return 0
 
+    if var in bb.utils.readonly_envvars():
+        o.write('# %s is a read-only variable; not expanding.\n' % var)
+        return 1
+
     try:
         if all:
             oval = getVar(var, d, 0)
