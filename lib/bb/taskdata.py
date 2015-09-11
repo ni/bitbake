@@ -597,13 +597,12 @@ class TaskData:
                     if self.abort and targetid in self.external_targets:
                         raise
                     self.remove_buildtarget(targetid)
-            if cfgData.getVar('BUILD_IMAGES_FROM_FEEDS', True) != "1" :
-                for target in self.get_unresolved_run_targets(dataCache):
-                    try:
-                        self.add_rprovider(cfgData, dataCache, target)
-                        added = added + 1
-                    except (bb.providers.NoRProvider, bb.providers.MultipleRProvider):
-                        self.remove_runtarget(self.getrun_id(target))
+            for target in self.get_unresolved_run_targets(dataCache):
+                try:
+                    self.add_rprovider(cfgData, dataCache, target)
+                    added = added + 1
+                except (bb.providers.NoRProvider, bb.providers.MultipleRProvider):
+                    self.remove_runtarget(self.getrun_id(target))
             logger.debug(1, "Resolved " + str(added) + " extra dependencies")
             if added == 0:
                 break
