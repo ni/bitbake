@@ -1152,6 +1152,7 @@ class RunQueue:
         if self.state is runQueueSceneInit:
             dump = self.cooker.configuration.dump_signatures
             if dump:
+                self.rqdata.init_progress_reporter.finish()
                 if 'printdiff' in dump:
                     invalidtasks = self.print_diffscenetasks()
                 self.dump_signatures(dump)
@@ -1978,6 +1979,8 @@ class RunQueueExecuteScenequeue(RunQueueExecute):
             if len(self.sq_revdeps[tid]) == 0:
                 self.runq_buildable.add(tid)
 
+        self.rqdata.init_progress_reporter.finish()
+
         self.outrightfail = []
         if self.rq.hashvalidate:
             sq_hash = []
@@ -2028,8 +2031,6 @@ class RunQueueExecuteScenequeue(RunQueueExecute):
                 if tid not in valid_new and tid not in noexec:
                     logger.debug(2, 'No package found, so skipping setscene task %s', tid)
                     self.outrightfail.append(tid)
-
-        self.rqdata.init_progress_reporter.finish()
 
         logger.info('Executing SetScene Tasks')
 
