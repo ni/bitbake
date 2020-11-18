@@ -622,8 +622,8 @@ class FetcherLocalTest(FetcherTest):
         self.assertEqual(tree, [r'backslash\x2dsystemd-unit.device'])
 
     def test_local_wildcard(self):
-        with self.assertRaises(bb.fetch2.ParameterError):
-            tree = self.fetchUnpack(['file://a', 'file://dir/*'])
+        tree = self.fetchUnpack(['file://a', 'file://dir/*'])
+        self.assertEqual(tree, ['a',  'dir/c', 'dir/d', 'dir/subdir/e'])
 
     def test_local_dir(self):
         tree = self.fetchUnpack(['file://a', 'file://dir'])
