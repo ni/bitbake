@@ -326,8 +326,10 @@ class ServerCommunicator():
 
     def runCommand(self, command):
         self.connection.send(command)
-        if not self.recv.poll(30):
-            raise ProcessTimeout("Timeout while waiting for a reply from the bitbake server")
+        if not self.recv.poll(300):
+            logger.info("No reply from server in 300s")
+            if not self.recv.poll(300):
+                raise ProcessTimeout("Timeout while waiting for a reply from the bitbake server (600s)")
         return self.recv.get()
 
     def updateFeatureSet(self, featureset):
