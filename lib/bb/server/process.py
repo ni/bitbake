@@ -390,12 +390,19 @@ class ServerCommunicator():
         self.connection = connection
         self.recv = recv
 
+        self.reply_wait = 10
+        self.max_reply_wait = 300
+
     def runCommand(self, command):
         self.connection.send(command)
-        if not self.recv.poll(30):
-            logger.info("No reply from server in 30s")
-            if not self.recv.poll(30):
-                raise ProcessTimeout("Timeout while waiting for a reply from the bitbake server (60s)")
+        total_reply_wait = self.reply_wait
+
+        while not self.recv.poll(self.reply_wait):
+            logger.info("No reply from server in %ds" % total_reply_wait)
+            total_reply_wait += self.reply_wait
+            if total_reply_wait > self.max_reply_wait:
+                raise ProcessTimeout("Timeout while waiting for a reply from the bitbake server (%ds)" % (total_reply_wait - self.reply_wait))
+
         ret, exc = self.recv.get()
         # Should probably turn all exceptions in exc back into exceptions?
         # For now, at least handle BBHandledException
