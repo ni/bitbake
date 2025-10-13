@@ -2088,6 +2088,7 @@ from . import npmsw
 from . import az
 from . import crate
 from . import gcp
+from . import niartifact
 
 methods.append(local.Local())
 methods.append(wget.Wget())
@@ -2110,3 +2111,4 @@ methods.append(npmsw.NpmShrinkWrap())
 methods.append(az.Az())
 methods.append(crate.Crate())
 methods.append(gcp.GCP())
+methods.append(niartifact.NiArtifact())
